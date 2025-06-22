@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Judul diubah untuk mencerminkan narasi -->
+    <title>Gerbang Hutan Pengetahuan | Petualangan Teks Observasi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-blur"></div>
+    <main class="container">
+        <section class="login-container">
+            <div class="login-header">
+                <img src="https://placehold.co/80x80/2A9D8F/FFFFFF?text=🌿" alt="Ikon Daun Tropis" class="login-icon">
+                <!-- Teks diubah sesuai narasi "Panggilan Berpetualang" -->
+                <h1>Masuki Hutan<br>Pengetahuan</h1>
+                <p>Daftarkan namamu pada buku catatan penjelajah untuk memulai ekspedisi di dunia teks observasi!</p>
+            </div>
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="nama-lengkap">Nama Penjelajah</label>
+                    <input type="text" id="nama-lengkap" name="nama-lengkap" placeholder="Contoh: Budi Sanjaya" required>
+                </div>
+                <div class="input-group">
+                    <label for="nomor-absen">Nomor Regu (Absen)</label>
+                    <input type="number" id="nomor-absen" name="nomor-absen" placeholder="Contoh: 12" required min="1">
+                </div>
+                <!-- Tombol disesuaikan dengan tema petualangan -->
+                <button type="submit" class="btn btn-primer">Mulai Petualangan!</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        // Logika untuk Halaman Login
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            // Mencegah form mengirim data ke server (karena ini statis)
+            event.preventDefault();
+
+            // Ambil nama dari input
+            const namaPengguna = document.getElementById('nama-lengkap').value;
+
+            // Simpan nama pengguna ke localStorage agar bisa diakses di halaman lain
+            localStorage.setItem('username', namaPengguna);
+            
+            // Hapus SEMUA progress sebelumnya jika ada, untuk memulai petualangan baru
+            localStorage.removeItem('materiPengertianSelesai');
+            localStorage.removeItem('materiStrukturSelesai');
+            localStorage.removeItem('permainanKeretaSelesai');
+
+            // Alihkan pengguna ke halaman beranda
+            window.location.href = 'beranda.html';
+        });
+    </script>
+</body>
+</html>

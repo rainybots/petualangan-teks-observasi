@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peta Penjelajah | Petualangan Teks Observasi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .modal-box #modal-description {
+            margin-bottom: 2rem; 
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <span class="brand">Petualangan Teks Observasi</span>
+            <span id="sapaan-pengguna"></span>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="page-title">
+            <h2>Peta Penjelajah</h2>
+            <p>Arahkan kursor dan klik pada ikon tanda tanya untuk melihat detail setiap tahap petualangan.</p>
+        </div>
+
+        <section class="map-container">
+            <svg class="map-background" viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+                <!-- Filter kertas perkamen -->
+                <defs>
+                    <filter id="roughpaper" x="0%" y="0%" width="100%" height="100%">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="5" seed="10" stitchTiles="stitch"/>
+                        <feDiffuseLighting in="turbulence" lighting-color="#F0EAD6" surfaceScale="2">
+                            <feDistantLight azimuth="45" elevation="60"/>
+                        </feDiffuseLighting>
+                    </filter>
+                </defs>
+                <rect width="100%" height="100%" fill="#F0EAD6"/>
+                <rect width="100%" height="100%" fill="transparent" filter="url(#roughpaper)" style="pointer-events:none;"/>
+                
+                <!-- Elemen Peta Dekoratif -->
+                <g class="map-scenery" style="opacity: 0.6;">
+                    <polygon fill="#BFB8A5" points="50,150 120,50 180,120 220,80 300,150"/>
+                    <polygon fill="#d3cec3" points="250,150 320,70 380,130 420,90 500,150"/>
+                </g>
+                <path d="M 500,0 Q 450,150 520,250 T 480,450" stroke="#a4c3d2" stroke-width="12" fill="none" class="map-scenery" style="opacity: 0.7"/>
+                <g class="map-scenery">
+                    <g transform="translate(100, 300) scale(0.15)" style="user-select: none;">
+                        <path d="M150 400 L150 250" stroke="#654321" stroke-width="20" />
+                        <path d="M150 250 C 50 250, 50 150, 150 150 C 250 150, 250 250, 150 250 Z" fill="#228B22" />
+                        <path d="M150 200 C 100 200, 100 100, 150 100 C 200 100, 200 200, 150 200 Z" fill="#2E8B57" />
+                    </g>
+                     <g transform="translate(550, 300) scale(0.12)" style="user-select: none;">
+                        <path d="M150 400 L150 250" stroke="#654321" stroke-width="20" />
+                        <path d="M150 250 C 50 250, 50 150, 150 150 C 250 150, 250 250, 150 250 Z" fill="#228B22" />
+                        <path d="M150 200 C 100 200, 100 100, 150 100 C 200 100, 200 200, 150 200 Z" fill="#2E8B57" />
+                    </g>
+                    <g transform="translate(80, 180) scale(0.09)" style="user-select: none;">
+                        <path d="M150 400 L150 250" stroke="#654321" stroke-width="20" />
+                        <path d="M150 250 C 50 250, 50 150, 150 150 C 250 150, 250 250, 150 250 Z" fill="#228B22" />
+                    </g>
+                     <g transform="translate(680, 250) scale(0.14)" style="user-select: none;">
+                        <path d="M150 400 L150 250" stroke="#654321" stroke-width="20" />
+                        <path d="M150 250 C 50 250, 50 150, 150 150 C 250 150, 250 250, 150 250 Z" fill="#2E8B57" />
+                    </g>
+                </g>
+
+                <!-- Jalur Petualangan -->
+                <path d="M 220,150 Q 320,250 420,250 T 580,130" stroke="#a08c6e" stroke-width="8" fill="none" stroke-dasharray="15 10" stroke-linecap="round"/>
+                
+                <!-- Label Teks -->
+                <text x="200" y="125" class="map-label" text-anchor="end">Gerbang</text>
+                <text x="600" y="105" class="map-label">Harta Karun</text>
+
+                <!-- Arah Mata Angin (Ros Kompas) -->
+                <g class="compass-rose" transform="translate(730, 70)">
+                    <circle cx="0" cy="0" r="30" stroke="#a08c6e" stroke-width="2" fill="#f0ead6cc"/>
+                    <line x1="0" y1="-25" x2="0" y2="25"/>
+                    <line x1="-25" y1="0" x2="25" y2="0"/>
+                    <polygon points="0,-30 5,-15 -5,-15"/>
+                    <text x="0" y="-35">U</text>
+                    <text x="0" y="45">S</text>
+                    <text x="38" y="5">T</text>
+                    <text x="-38" y="5">B</text>
+                </g>
+            </svg>
+
+            <!-- Titik Interaktif -->
+            <div id="point-materi" class="map-point" 
+                 data-title="Petunjuk Harta Karun" 
+                 data-description="Pelajari cara membaca peta dan memahami simbol-simbol kuno (struktur teks) untuk menemukan jalan menuju harta karun." 
+                 data-url="materi.html">
+                 ?
+            </div>
+            <div id="point-permainan" class="map-point terkunci"
+                 data-title="Kereta Menuju Harta Karun" 
+                 data-description="Petunjuk sudah di tangan! Susun rute perjalananmu dengan benar menggunakan kereta ini untuk melanjutkan pencarian." 
+                 data-url="kereta.html">
+                 ?
+            </div>
+            <div id="point-kuis" class="map-point terkunci"
+                 data-title="Harta Karun"
+                 data-description="Kamu telah sampai di tujuan akhir! Buktikan pemahamanmu untuk membuka peti dan mengklaim harta karun pengetahuan ini."
+                 data-url="kuis.html">
+                 ?
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Didesain oleh Satria Ahnaf untuk Edukasi</p>
+    </footer>
+
+    <div id="info-modal" class="modal-overlay">
+      <div class="modal-box">
+        <h3 id="modal-title"></h3>
+        <p id="modal-description"></p>
+        <a id="modal-start-button" href="#" class="btn btn-primer">Mulai</a>
+      </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Logika JavaScript tetap sama
+            const namaPengguna = localStorage.getItem('username');
+            const sapaanElement = document.getElementById('sapaan-pengguna');
+
+            if (namaPengguna) {
+                sapaanElement.textContent = `Selamat Datang, ${namaPengguna}!`;
+            } else {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const pointPermainan = document.getElementById('point-permainan');
+            const pointKuis = document.getElementById('point-kuis');
+            const allPoints = document.querySelectorAll('.map-point');
+            const modal = document.getElementById('info-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDescription = document.getElementById('modal-description');
+            const modalStartButton = document.getElementById('modal-start-button');
+            
+            // Cek progres untuk membuka kunci
+            const materiSelesai = localStorage.getItem('materiPengertianSelesai') === 'true';
+            if (materiSelesai) {
+                pointPermainan.classList.remove('terkunci');
+            }
+
+            const permainanKeretaSelesai = localStorage.getItem('permainanKeretaSelesai') === 'true';
+            if (permainanKeretaSelesai) {
+                pointKuis.classList.remove('terkunci');
+            }
+
+            allPoints.forEach(point => {
+                point.addEventListener('click', function(event) {
+                    if (point.classList.contains('terkunci')) {
+                        // Jika ingin memberikan pesan saat ikon terkunci diklik, bisa ditambahkan di sini
+                        event.preventDefault();
+                        return;
+                    }
+                    modalTitle.textContent = point.dataset.title;
+                    modalDescription.textContent = point.dataset.description;
+                    modalStartButton.href = point.dataset.url;
+                    modal.classList.add('show');
+                });
+            });
+
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi | Petualangan Teks Observasi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Khusus untuk Pohon Interaktif */
+        .pohon-interaktif-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .pohon-diagram-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .pohon-node {
+            width: 80%;
+            padding: 1rem;
+            border: 3px solid var(--warna-teks);
+            border-radius: var(--radius-sudut);
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pohon-node:hover, .pohon-node.aktif {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: var(--bayangan-halus);
+        }
+        
+        .pohon-line {
+            width: 4px;
+            height: 30px;
+            background-color: var(--warna-teks);
+        }
+
+        .node-buah { background-color: #E76F51; color: var(--warna-putih); }
+        .node-dahan { background-color: #2A9D8F; color: var(--warna-putih); }
+        .node-batang { background-color: #A0522D; color: var(--warna-putih); }
+        .node-akar { background-color: #E9C46A; color: var(--warna-teks); }
+
+        .node-buah.aktif { border-color: #E76F51; }
+        .node-dahan.aktif { border-color: #2A9D8F; }
+        .node-batang.aktif { border-color: #A0522D; }
+        .node-akar.aktif { border-color: #E9C46A; }
+
+
+        #panel-penjelasan-pohon {
+            background-color: var(--warna-putih);
+            border-left: 5px solid var(--warna-primer);
+            padding: 1.5rem;
+            border-radius: var(--radius-sudut);
+            box-shadow: var(--bayangan-halus);
+            width: 100%;
+            margin-top: 1.5rem;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="beranda.html" class="brand">Kembali ke Peta</a>
+            <span id="sapaan-pengguna"></span>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- [BARU] Halaman Intro Petunjuk Harta Karun -->
+        <section id="petunjuk-harta-karun" class="materi-section">
+            <h2>🗺️ Petunjuk Harta Karun</h2>
+            <p>Selamat datang, Penjelajah! Di hadapanmu terbentang sebuah petualangan untuk menemukan Harta Karun Pengetahuan yang legendaris. Namun, jalan menuju ke sana tidaklah mudah.</p>
+            <p>Kamu harus memecahkan serangkaian teka-teki yang tersimpan dalam materi di depan. Setiap halaman yang kamu pelajari adalah kepingan petunjuk. Pahami baik-baik setiap konsepnya, karena itulah kunci untuk membuka jalan selanjutnya.</p>
+            <p>Apakah kamu siap membuktikan kemampuanmu dan mengklaim harta karun itu? Jika iya, tekan tombol di bawah ini untuk memulai!</p>
+            <button id="btn-mulai-petualangan" class="btn btn-primer" style="margin-top: 1rem;">Mulai Petualangan!</button>
+        </section>
+
+        <!-- Halaman 1: Pengertian (Awalnya tersembunyi) -->
+        <section id="pengertian" class="materi-section" style="display: none;">
+            <h2>📜 Pengertian Teks Observasi</h2>
+            <p>Secara sederhana, teks laporan hasil observasi adalah sebuah tulisan yang menyajikan informasi berdasarkan pengamatan langsung di lapangan. Prosesnya dimulai dari kegiatan "observasi," di mana seorang pengamat mencatat semua fakta yang ia lihat dan dengar secara objektif, tanpa menambahkan opini pribadi.</p>
+            <p>Catatan-catatan faktual inilah yang kemudian disusun menjadi sebuah "laporan" yang terstruktur. Tujuannya adalah untuk mengkomunikasikan atau mendeskripsikan temuan tersebut kepada pembaca. Karena sifatnya yang deskriptif dan berdasarkan pengamatan nyata, KBBI pun mendefinisikannya sebagai naskah dari kata-kata asli penulis. Objeknya bisa sangat beragam, mencakup apa pun yang bisa diamati—mulai dari fenomena alam, ciri-ciri tumbuhan, perilaku hewan, hingga sebuah peristiwa sosial.</p>
+            <p>Bayangkan kamu adalah seorang detektif alam. Tugasmu bukan menduga-duga, tapi mencatat semua yang kamu lihat, dengar, dan temukan. Itulah inti dari observasi!</p>
+            <button id="btn-lanjut" class="btn btn-primer" style="margin-top: 1rem; float: right;">Lanjut ke Pohon Observasi →</button>
+        </section>
+
+        <!-- Halaman 2: Pohon Observasi Interaktif (Awalnya tersembunyi) -->
+        <section id="struktur" class="materi-section" style="display: none;">
+            <button id="btn-kembali" class="btn btn-sekunder" style="margin-bottom: 1.5rem;">← Kembali ke Pengertian</button>
+            <h2>🌳 Pohon Observasi</h2>
+            <p>Halo teman-teman! Hari ini kita akan menjadi "petani kata" dan menanam Pohon Observasi. Klik pada setiap bagian pohon untuk melihat bagaimana ia tumbuh menjadi sebuah laporan yang utuh.</p>
+            
+            <div class="pohon-interaktif-container">
+                <div class="pohon-diagram-wrapper">
+                    <!-- Buah -->
+                    <div class="pohon-node node-buah bagian-pohon-interaktif" data-judul="4. Buah yang Bisa Dinikmati: Deskripsi Manfaat" data-deskripsi="Apa gunanya pohon jika tidak memberikan manfaat? Mungkin buahnya bisa kita makan, atau kayunya bisa kita gunakan, atau sekadar memberi keteduhan. Inilah tujuan akhir dari pohon kita, yaitu Deskripsi Manfaat atau Simpulan. Setelah menjelaskan semua bagian secara rinci, di sinilah kita menyimpulkan apa sih gunanya informasi ini? Apa manfaat dari objek yang kita amati? Misalnya, 'Memelihara kucing anggora dapat bermanfaat untuk mengurangi stres.' Bagian ini adalah 'hasil panen' dari pengamatan kita yang bisa dipetik oleh pembaca.">
+                        Buah (Deskripsi Manfaat)
+                    </div>
+                    <div class="pohon-line"></div>
+                    <!-- Dahan & Daun -->
+                    <div class="pohon-node node-dahan bagian-pohon-interaktif" data-judul="3. Dahan, Ranting, dan Daun yang Rimbun: Deskripsi Bagian" data-deskripsi="Pohon tidak akan lengkap tanpa dahan, ranting, dan dedaunan yang membuatnya rimbun dan menarik. Di sinilah kita merinci semua temuan kita. Kalau tadi kita membahas 'Kucing Anggora', maka di Deskripsi Bagian inilah kita jelaskan ciri-ciri fisiknya (dahan), kebiasaan makannya (ranting), hingga cara berkembang biaknya (daun). Setiap detail yang kita amati akan menjadi cabang dan ranting baru yang membuat 'Pohon Observasi' kita semakin kaya dan informatif.">
+                        Dahan & Daun (Deskripsi Bagian)
+                    </div>
+                    <div class="pohon-line"></div>
+                    <!-- Batang -->
+                    <div class="pohon-node node-batang bagian-pohon-interaktif" data-judul="2. Batang yang Kokoh: Judul" data-deskripsi="Setelah akarnya siap, kita butuh sesuatu yang pertama kali muncul dan terlihat jelas, yaitu Judul. Judul adalah bagian yang paling pertama dilihat dan langsung memberi tahu inti dari seluruh pohon observasi kita. Misalnya, 'Mengenal Kehidupan Kucing Anggora'. Judul ini seperti batang yang kokoh; dia singkat, padat, dan menjadi pusat dari semua bagian lain yang akan tumbuh nanti.">
+                        Batang (Judul)
+                    </div>
+                    <div class="pohon-line"></div>
+                    <!-- Akar -->
+                     <div class="pohon-node node-akar bagian-pohon-interaktif" data-judul="1. Akar dan Tanah yang Subur: Pernyataan Umum" data-deskripsi="Setiap pohon butuh tanah yang subur dan akar yang kuat untuk bisa berdiri tegak. Dalam teks LHO, bagian ini adalah Pernyataan Umum atau Klasifikasi Umum. Sama seperti akar yang menopang seluruh pohon, Pernyataan Umum ini adalah fondasi dari seluruh tulisan kita. Di sinilah kita 'mengenalkan' pohon apa yang akan kita tanam. Misalnya: 'Kucing adalah mamalia karnivora dari keluarga Felidae...'. Bagian ini memberikan gambaran besar kepada pembaca.">
+                        Akar (Pernyataan Umum)
+                    </div>
+                </div>
+
+                <div id="panel-penjelasan-pohon">
+                    <h3 id="panel-judul">Selamat Datang, Petani Kata!</h3>
+                    <p id="panel-deskripsi">Klik salah satu bagian dari Pohon Observasi untuk memulai! Setiap bagian menyimpan rahasia tentang cara membangun sebuah laporan yang hebat.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Didesain oleh Satria Ahnaf untuk Edukasi</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // [PERUBAHAN] Mendapatkan elemen-elemen baru dan yang sudah ada
+            const sectionPetunjuk = document.getElementById('petunjuk-harta-karun');
+            const sectionPengertian = document.getElementById('pengertian');
+            const sectionStruktur = document.getElementById('struktur');
+            const btnMulaiPetualangan = document.getElementById('btn-mulai-petualangan');
+            const btnLanjut = document.getElementById('btn-lanjut');
+            const btnKembali = document.getElementById('btn-kembali');
+
+            // Logika Sapaan Pengguna
+            const namaPengguna = localStorage.getItem('username');
+             if (!namaPengguna) {
+                window.location.href = 'index.html';
+             }
+            document.getElementById('sapaan-pengguna').textContent = `Penjelajah: ${namaPengguna}`;
+            
+            // Tandai materi 1 (pengertian) selesai saat halaman dimuat
+            localStorage.setItem('materiPengertianSelesai', 'true');
+
+            // [BARU] Logika untuk memulai petualangan dari halaman petunjuk
+            btnMulaiPetualangan.addEventListener('click', function() {
+                sectionPetunjuk.style.display = 'none';
+                sectionPengertian.style.display = 'block';
+                window.scrollTo(0, 0);
+            });
+
+            // Logika Navigasi Antar Halaman Materi (tetap sama)
+            btnLanjut.addEventListener('click', function() {
+                sectionPengertian.style.display = 'none';
+                sectionStruktur.style.display = 'block';
+                window.scrollTo(0, 0);
+            });
+
+            btnKembali.addEventListener('click', function() {
+                sectionStruktur.style.display = 'none';
+                sectionPengertian.style.display = 'block';
+                 window.scrollTo(0, 0);
+            });
+
+
+            // Logika untuk Pohon Interaktif (tetap sama)
+            const panelPenjelasan = document.getElementById('panel-penjelasan-pohon');
+            const panelJudul = document.getElementById('panel-judul');
+            const panelDeskripsi = document.getElementById('panel-deskripsi');
+            const bagianPohon = document.querySelectorAll('.bagian-pohon-interaktif');
+
+            bagianPohon.forEach(bagian => {
+                bagian.addEventListener('click', function() {
+                    bagianPohon.forEach(b => b.classList.remove('aktif'));
+                    this.classList.add('aktif');
+
+                    const judul = this.getAttribute('data-judul');
+                    const deskripsi = this.getAttribute('data-deskripsi');
+
+                    panelJudul.textContent = judul;
+                    panelDeskripsi.textContent = deskripsi;
+
+                    panelPenjelasan.style.display = 'block';
+                    
+                    localStorage.setItem('materiStrukturSelesai', 'true');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

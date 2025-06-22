@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tantangan Akhir | Petualangan Teks Observasi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="beranda.html" class="brand">Kembali ke Peta</a>
+            <span id="sapaan-pengguna"></span>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div id="area-kuis">
+            <!-- Konten kuis akan dimuat di sini oleh JavaScript -->
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Didesain oleh Satria Ahnaf untuk Edukasi</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+             // Cek otorisasi
+            const permainanKeretaSelesai = localStorage.getItem('permainanKeretaSelesai') === 'true';
+            const namaPengguna = localStorage.getItem('username');
+
+            // Logika otorisasi yang diperbarui: Harus menyelesaikan permainan kereta
+            if (!namaPengguna || !permainanKeretaSelesai) {
+                const areaKuis = document.getElementById('area-kuis');
+                let pesanError = '';
+                if (!namaPengguna) {
+                    pesanError = 'Anda harus masuk terlebih dahulu.';
+                } else {
+                    pesanError = 'Anda harus menyelesaikan "Permainan Kereta" terlebih dahulu sebelum bisa membuka tantangan ini.';
+                }
+
+                areaKuis.innerHTML = `
+                    <div class="kuis-container kuis-hasil">
+                        <h2>Akses Ditolak!</h2>
+                        <p><strong>${pesanError}</strong></p>
+                        <a href="beranda.html" class="btn btn-sekunder">Kembali ke Peta</a>
+                    </div>
+                `;
+                return; // Hentikan eksekusi skrip
+            }
+             document.getElementById('sapaan-pengguna').textContent = `Ayo, ${namaPengguna}!`;
+
+
+            // --- DATA KUIS BARU ---
+            const dataKuis = [
+                {
+                    bacaan: `Teks: "Masyarakat Suku Badui di Banten termasuk salah satu suku yang menerapkan isolasi dari dunia luar. Itulah salah satu keunikan Suku Badui sehingga wajar mereka sangat menjaga betul 'pikukuh' atau ajaran mereka, entah berupa kepercayaan dan kebudayaan."`,
+                    pertanyaan: `"Sikap isolasi Suku Badui merupakan cara terbaik dan paling efektif untuk mempertahankan keaslian budaya di tengah gempuran modernisasi." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Uniknya, semua yang dipakai suku Badui Dalam adalah hasil produksi mereka sendiri. Biasanya para perempuan yang bertugas membuatnya. Mereka dilarang memakai pakaian modern."`,
+                    pertanyaan: `"Kemandirian Suku Badui Dalam dalam memproduksi pakaian menunjukkan bahwa mereka tidak tertarik dengan produk-produk modern yang dianggap lebih praktis dan efisien." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Hingga saat ini, suku Badui Dalam tidak mengenal budaya baca tulis... Menurut mereka, inilah cara mereka melestarikan adat leluhurnya."`,
+                    pertanyaan: `"Penolakan terhadap budaya baca tulis modern adalah sebuah pandangan yang sempit karena menghalangi generasi muda Suku Badui untuk berkembang." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Tidak Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Kepercayaan ini memuja arwah nenek moyang (animisme) yang pada selanjutnya kepercayaan mereka mendapat pengaruh dari Buddha dan Hindu."`,
+                    pertanyaan: `"Kepercayaan Sunda Wiwitan yang dianut Suku Badui adalah murni ajaran leluhur tanpa adanya pengaruh dari kebudayaan atau agama luar sama sekali." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Tidak Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Badui Luar merupakan orang-orang yang telah keluar dari adat dan wilayah Badui Dalam... Badui Luar lebih mengenal teknologi dibanding Badui Dalam."`,
+                    pertanyaan: `"Keberadaan Badui Luar menunjukkan adanya kegagalan Suku Badui dalam mempertahankan semua warganya untuk patuh secara kaku pada 'pikukuh' asli." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Taman Nasional Baluran merupakan perwakilan ekosistem hutan spesifik kering di Pulau Jawa. Hutan di taman ini terdiri atas tipe vegetasi savana, hutan mangrove, hutan musim, hutan pantai, dll."`,
+                    pertanyaan: `"Dengan keragaman vegetasi yang dimilikinya, Taman Nasional Baluran seharusnya lebih cocok disebut sebagai miniatur hutan Indonesia daripada sekadar perwakilan ekosistem kering." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Widoro bukol, mimba, dan pilang merupakan tumbuhan yang mampu beradaptasi dalam kondisi yang sangat kering (masih kelihatan hijau), walaupun tumbuhan lainnya sudah layu dan mengering."`,
+                    pertanyaan: `"Kemampuan adaptasi widoro bukol, mimba, dan pilang membuktikan bahwa ketiganya adalah jenis flora superior yang paling berharga di dalam ekosistem Taman Nasional Baluran." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Tidak Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Di taman ini juga terdapat 26 jenis mamalia... Satwa banteng merupakan maskot/ciri khas Taman Nasional Baluran."`,
+                    pertanyaan: `"Meskipun memiliki 26 jenis mamalia, keberadaan banteng sebagai maskot menunjukkan bahwa satwa lain kurang mendapat perhatian dalam upaya konservasi." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Tidak Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Satwa banteng merupakan maskot/ciri khas Taman Nasional Baluran."`,
+                    pertanyaan: `"Penetapan banteng sebagai maskot adalah strategi pencitraan yang tepat untuk menarik minat wisatawan yang lebih peduli pada satwa besar daripada ekosistem secara keseluruhan." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Tidak Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Diperlukan suatu bentuk kebijakan yang mampu mengatur pengalokasian sumber daya dalam kaitannya dengan pemenuhan kebutuhan masyarakat dengan tetap memperhatikan daya dukung lingkungan dan aspek sosial ekonomi masyarakat sekitarnya."`,
+                    pertanyaan: `"Kebijakan pengelolaan taman nasional seharusnya lebih memprioritaskan manfaat ekonomi untuk masyarakat sekitar daripada aspek pelestarian lingkungan murni." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Tidak Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Indonesia menjadi negara dengan hutan bakau paling luas di dunia."`,
+                    pertanyaan: `"Status sebagai negara dengan hutan bakau terluas di dunia seharusnya memberikan Indonesia tanggung jawab global yang lebih besar dalam isu perubahan iklim." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Pasang surut laut mengubah kondisi hutan bakau. Hutan akan tergenang air di masa pasang dan akan bebas dari genangan air pada saat air surut."`,
+                    pertanyaan: `"Kondisi yang terus berubah akibat pasang surut menjadikan hutan bakau sebagai habitat yang tidak stabil dan kurang ideal untuk perkembangan biota laut." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Tidak Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Hutan bakau juga menurunkan kandungan karbondioksida (CO2) di udara dan penambat bahan-bahan pencemar (racun) di perairan pantai."`,
+                    pertanyaan: `"Manfaat ekologis hutan bakau sebagai penyerap CO2 jauh lebih penting daripada manfaat fisiknya sebagai penahan abrasi pantai." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Tidak Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Hutan bakau menjadi tempat hidup biota laut. Selain itu, masyarakat sekitar memanfaatkan hutan bakau sebagai sumber mata pencaharian."`,
+                    pertanyaan: `"Eksploitasi hutan bakau sebagai sumber mata pencaharian oleh masyarakat sekitar pasti akan merusak fungsinya sebagai habitat biota laut." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Tidak Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Secara fisik hutan bakau dapat menahan abrasi pantai. Pada saat datang badai, hutan bakau berfungsi sebagai penahan badai dan angin yang bermuatan garam."`,
+                    pertanyaan: `"Membangun tembok beton di sepanjang pantai adalah solusi yang lebih modern dan lebih kuat untuk menahan abrasi dibandingkan hanya mengandalkan hutan bakau." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Tidak Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Museum adalah lembaga yang berfungsi mengumpulkan, merawat, dan menyajikan serta melestarikan warisan budaya masyarakat untuk tujuan studi, penelitian, dan kesenangan atau hiburan."`,
+                    pertanyaan: `"Fungsi museum sebagai tempat 'kesenangan atau hiburan' menunjukkan bahwa museum seharusnya lebih fokus pada pameran interaktif yang menarik bagi awam daripada koleksi yang hanya diminati peneliti." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Museum Umum adalah museum yang koleksinya terdiri dari kumpulan bukti material... yang berkaitan dengan berbagai cabang seni, disiplin ilmu, dan teknologi."`,
+                    pertanyaan: `"Museum Umum memiliki nilai edukasi yang lebih rendah dibandingkan Museum Khusus karena koleksinya tidak fokus dan terlalu beragam." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Tidak Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Museum Nasional adalah museum yang koleksinya terdiri atas kumpulan benda yang berkaitan dengan bukti material... dari seluruh wilayah Indonesia yang bernilai nasional."`,
+                    pertanyaan: `"Mengumpulkan benda bersejarah dari berbagai daerah di Museum Nasional berpotensi menghilangkan konteks asli dan kebanggaan lokal terhadap benda tersebut." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Tidak Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Fungsi museum yang utama adalah menyimpan, merawat, mengamankan, dan memanfaatkan koleksi museum berupa benda cagar budaya."`,
+                    pertanyaan: `"Fungsi penyimpanan dan perawatan koleksi seharusnya menjadi prioritas tertinggi, bahkan jika itu berarti museum harus tertutup untuk umum demi keamanan benda cagar budaya." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Sesuai"
+                },
+                {
+                    bacaan: `Teks: "Museum Khusus adalah museum yang koleksinya terdiri atas kumpulan bukti material... yang berkaitan dengan satu cabang seni, satu cabang ilmu, atau satu cabang teknologi."`,
+                    pertanyaan: `"Museum Khusus lebih unggul daripada Museum Umum karena mampu memberikan pemahaman yang lebih mendalam dan spesifik kepada pengunjungnya." Apakah informasi ini sesuai dengan kutipan teks?`,
+                    pilihan: ["Sesuai", "Tidak Sesuai"],
+                    jawaban: "Sesuai"
+                }
+            ];
+
+            let soalSekarang = 0;
+            let skor = 0;
+            let timer;
+            const waktuPerSoal = 120;
+            const areaKuis = document.getElementById('area-kuis');
+
+            function tampilkanTujuanAkhir() {
+                areaKuis.innerHTML = `
+                    <div class="kuis-container kuis-intro" style="animation: fadeInPage 0.5s;">
+                        <h2>🏆 Tujuan Akhir</h2>
+                        <p><strong>Selamat datang, Penjelajah Hebat!</strong> Kamu telah melewati semua rintangan dan tiba di destinasi terakhir: peti harta karun pengetahuan!</p>
+                        <p>Namun, peti ini terkunci oleh serangkaian teka-teki kuno. Untuk membukanya, kamu harus membuktikan pemahamanmu.</p>
+                        <p>Di balik tombol ini, kamu akan menemukan kumpulan teks observasi. Bacalah dengan saksama, karena jawaban dari setiap pertanyaan tersembunyi di dalamnya. Siap untuk tantangan terakhir?</p>
+                        <button id="btn-lihat-teks" class="btn btn-primer" style="margin-top: 1rem;">Lihat Teks & Buka Tantangan!</button>
+                    </div>
+                `;
+                document.getElementById('btn-lihat-teks').addEventListener('click', tampilkanPengantarTeks);
+            }
+            
+            function tampilkanPengantarTeks() {
+                areaKuis.innerHTML = `
+                    <div class="teks-observasi-container" style="animation: fadeInPage 0.5s;">
+                        <h2>Bacalah Teks Berikut!</h2>
+                        <p>Pahami keempat teks laporan hasil observasi di bawah ini dengan saksama. Pemahamanmu akan diuji pada kuis setelah ini.</p>
+                        
+                        <article class="teks-observasi-item">
+                            <h3>Teks 1: Mengenal Suku Badui</h3>
+                            <h4>Pernyataan Umum</h4>
+                            <p>Orang Kanekes atau orang Baduy/Badui adalah suatu kelompok masyarakat adat sub-etnis Sunda di wilayah Kabupaten Lebak, Banten. Masyarakat Suku Badui di Banten termasuk salah satu suku yang menerapkan isolasi dari dunia luar. Itulah salah satu keunikan Suku Badui sehingga wajar mereka sangat menjaga betul 'pikukuh' atau ajaran mereka, entah berupa kepercayaan dan kebudayaan.</p>
+                            <h4>Deskripsi Bagian</h4>
+                            <p>Badui Dalam belum mengenal budaya luar dan terletak di hutan pedalaman. Karena belum mengenal kebudayaan luar, suku Badui Dalam masih memiliki budaya yang sangat asli. Mereka dikenal sangat taat mempertahankan adat istiadat dan warisan nenek moyangnya. Mereka memakai pakaian yang berwarna putih dengan ikat kepala putih serta membawa golok. Pakaian suku Badui Dalam pun tidak berkancing atau kerah.</p>
+                            <p>Uniknya, semua yang dipakai suku Badui Dalam adalah hasil produksi mereka sendiri. Biasanya para perempuan yang bertugas membuatnya. Mereka dilarang memakai pakaian modern. Selain itu, setiap kali bepergian, mereka tidak memakai kendaraan bahkan tidak memakai alas kaki dan terdiri atas kelompok kecil berjumlah 3-5 orang. Mereka dilarang menggunakan perangkat teknologi, seperti HP dan TV.</p>
+                            <p>Suku ini memiliki kepercayaan yang dikenal Sunda Wiwitan (Sunda: berasal dari suku sunda, wiwitan: asli). Kepercayaan ini memuja arwah nenek moyang (animisme) yang pada selanjutnya kepercayaan mereka mendapat pengaruh dari Buddha dan Hindu. Kepercayaan suku ini merupakan refleksi kepercayaan masyarakat Sunda sebelum masuk agama Islam. Hingga saat ini, suku Badui Dalam tidak mengenal budaya baca tulis. Yang mereka tahu, ialah aksara Hanacaraka (aksara Sunda). Anak-anak suku Badui Dalam pun tidak bersekolah, kegiatannya hanya sekitar sawah dan kebun. Menurut mereka, inilah cara mereka melestarikan adat leluhurnya. Meskipun sejak pemerintahan Soeharto sampai sekarang sudah diadakan upaya untuk membujuk mereka agar mengizinkan pembangunan sekolah, tetapi mereka selalu menolak. Dengan demikian, banyak cerita atau sejarah mereka hanya ada di ingatan atau cerita lisan saja.</p>
+                            <p>Badui Luar merupakan orang-orang yang telah keluar dari adat dan wilayah Badui Dalam. Ada beberapa hal yang menyebabkan dikeluarkanya warga Badui Dalam ke Badui Luar. Pada dasarnya, peraturan yang ada di Badui Luar dan Badui Ddalam itu hampir sama, tetapi Badui Luar lebih mengenal teknologi dibanding Badui Dalam.</p>
+                        </article>
+
+                        <article class="teks-observasi-item">
+                            <h3>Teks 2: Taman Nasional Baluran</h3>
+                            <h4>Pernyataan Umum</h4>
+                            <p>Taman Nasional Baluran merupakan perwakilan ekosistem hutan spesifik kering di Pulau Jawa. Hutan di taman ini terdiri atas tipe vegetasi savana, hutan mangrove, hutan musim, hutan pantai, hutan pegunungan bawah, hutan rawa dan hutan yang selalu hijau sepanjang tahun. Taman Nasional Baluran memiliki berbagai macam flora dan fauna serta ekosistem.</p>
+                            <h4>Deskripsi Bagian</h4>
+                            <p>Tumbuhan di taman nasional ini sebanyak 444 jenis. Di antara jenis tumbuhan di sini terdapat tumbuhan asli yang khas dan menarik yaitu widoro bukol (Ziziphus rotundifolia), mimba (Azadirachta indica), dan pilang (Acacia leucophloea). Widoro bukol, mimba, dan pilang merupakan tumbuhan yang mampu beradaptasi dalam kondisi yang sangat kering (masih kelihatan hijau), walaupun tumbuhan lainnya sudah layu dan mengering.</p>
+                            <p>Tumbuhan yang lain seperti asam (Tamarindus indica), gadung (Dioscorea hispida), kemiri (Aleurites moluccana), gebang (Corypha utan), api-api (Avicennia sp.), kendal (Cordia obliqua), manting (Syzygium polyanthum), dan kepuh (Sterculia foetida).</p>
+                            <p>Di taman ini juga terdapat 26 jenis mamalia di antaranya banteng (Bos javanicus javanicus), kerbau liar (Bubalus bubalis), ajag (Cuon alpinus javanicus), kijang (Muntiacus muntjak muntjak), rusa (Cervus timorensis russa), macan tutul (Panthera pardus melas), kancil (Tragulus javanicus pelandoc), dan kucing bakau (Prionailurus viverrinus). Satwa banteng merupakan maskot/ciri khas Taman Nasional Baluran.</p>
+                            <p>Selain itu, terdapat sekitar 155 jenis burung di antaranya termasuk yang langka seperti layang-layang api (Hirundo rustica), tuwuk/tuwur asia (Eudynamys scolopacea), burung merak (Pavo muticus), ayam hutan merah (Gallus gallus), kangkareng (Anthracoceros convecus), rangkong (Buceros rhinoceros), dan bangau tong-tong (Leptoptilos javanicus).</p>
+                            <h4>Deskripsi Manfaat</h4>
+                            <p>Taman nasional memiliki beragam manfaat berupa produk jasa lingkungan, seperti udara bersih dan pemandangan alam. Kedua manfaat tersebut berada pada suatu ruang dan waktu yang sama. Diperlukan suatu bentuk kebijakan yang mampu mengatur pengalokasian sumber daya dalam kaitannya dengan pemenuhan kebutuhan masyarakat dengan tetap memperhatikan daya dukung lingkungan dan aspek sosial ekonomi masyarakat sekitarnya.</p>
+                        </article>
+
+                        <article class="teks-observasi-item">
+                            <h3>Teks 3: Hutan Bakau</h3>
+                            <h4>Pernyataan Umum</h4>
+                            <p>Indonesia menjadi negara dengan hutan bakau paling luas di dunia. Menurut data Kementerian Negara Lingkungan Hidup, luas hutan bakau Indonesia mencapai 4,3 juta ha. Hutan bakau disebut juga dengan hutan mangrove. Hutan bakau merupakan bagian dari ekosistem pantai. Hutan bakau adalah hutan yang tumbuh di atas rawa-rawa berair payau dan terletak di garis pantai. Hutan bakau merupakan hutan yang tumbuh di wilayah pasang dan surut. Hutan bakau ini termasuk lingkup ekosistem pantai sebab terletak di kawasan perbatasan laut dan darat.</p>
+                            <h4>Deskripsi Bagian</h4>
+                            <p>Hutan bakau terletak di wilayah pantai dan muara sungai. Tepatnya, hutan bakau terletak di garis pantai. Dengan posisi hutan bakau yang berada di garis pantai, hutan ini dipengaruhi oleh keadaan air laut. Pasang surut laut mengubah kondisi hutan bakau. Hutan akan tergenang air di masa pasang dan akan bebas dari genangan air pada saat air surut. Habitat hutan bakau memiliki wilayah tanah yang tergenang secara berkala. Tempat tersebut juga mendapat aliran air tawar yang cukup dari daratan.</p>
+                            <p>Hutan bakau memiliki ciri yang khas. Hutan ini terlindung dari gelombang besar. Selain itu, hutan bakau juga terlindung dari arus pasang surut laut yang kuat. Hutan bakau yang terletak di perbatasan laut dan muara sungai memiliki kadar garam payau. Di samping itu, ciri khas lain hutan bakau adalah berawa-rawa.</p>
+                            <h4>Deskripsi Manfaat</h4>
+                            <p>Hutan bakau memiliki beberapa fungsi dan manfaat. Secara fisik hutan bakau dapat menahan abrasi pantai. Pada saat datang badai, hutan bakau berfungsi sebagai penahan badai dan angin yang bermuatan garam. Di samping itu, hutan bakau dapat menahan intrusi (peresapan) air laut ke daratan. Hutan bakau juga menurunkan kandungan karbondioksida (CO2) di udara dan penambat bahan-bahan pencemar (racun) di perairan pantai. Manfaat hutan bakau juga dapat dilihat dari segi biologi. Hutan bakau menjadi tempat hidup biota laut. Selain itu, masyarakat sekitar memanfaatkan hutan bakau sebagai sumber mata pencaharian. Hutan bakau juga menyediakan beberapa unsur penting bahan obat-obatan.</p>
+                        </article>
+
+                        <article class="teks-observasi-item">
+                            <h3>Teks 4: Museum</h3>
+                            <h4>Pernyataan Umum</h4>
+                            <p>Museum merupakan salah satu tempat penting dalam upaya pelestarian sejarah. Museum adalah lembaga yang berfungsi mengumpulkan, merawat, dan menyajikan serta melestarikan warisan budaya masyarakat untuk tujuan studi, penelitian, dan kesenangan atau hiburan.</p>
+                            <h4>Deskripsi Bagian</h4>
+                            <p>Museum dibedakan berdasarkan koleksi dan kedudukannya. Jenis museum berdasarkan koleksi yang dimiliki dibedakan menjadi dua jenis yaitu museum umum dan museum khusus. Museum Umum adalah museum yang koleksinya terdiri dari kumpulan bukti material manusia dan atau lingkungannya yang berkaitan dengan berbagai cabang seni, disiplin ilmu, dan teknologi. Sementara Museum Khusus adalah museum yang koleksinya terdiri atas kumpulan bukti material manusia atau lingkungannya yang berkaitan dengan satu cabang seni, satu cabang ilmu, atau satu cabang teknologi.</p>
+                            <p>Berdasarkan kedudukannya, terdapat tiga jenis museum. Museum Nasional adalah museum yang koleksinya terdiri atas kumpulan benda yang berkaitan dengan bukti material manusia dan atau lingkungannya dari seluruh wilayah Indonesia yang bernilai nasional. Museum Provinsi adalah museum yang koleksinya terdiri dari kumpulan benda yang berkaitan dengan bukti material manusia dan atau lingkungannya dari wilayah provinsi. Museum Lokal, museum yang koleksinya terdiri atas kumpulan benda yang berkaitan dengan bukti material manusia dan atau lingkungannya dari wilayah kabupaten atau kotamadya.</p>
+                            <h4>Deskripsi Manfaat</h4>
+                            <p>Fungsi museum yang utama adalah menyimpan, merawat, mengamankan, dan memanfaatkan koleksi museum berupa benda cagar budaya. Dengan demikian, museum memiliki fungsi besar yaitu sebagai tempat pelestarian. Secara lebih rinci fungsi museum mencakup kegiatan penyimpanan, perawatan, dan pengamanan.</p>
+                        </article>
+
+                    </div>
+                    <div class="kuis-container kuis-intro">
+                        <h2>Siap Memulai Tantangan?</h2>
+                        <p>Kamu akan memiliki waktu <strong>2 menit untuk setiap soal</strong>. Jika waktu habis, soal akan dilewati. Total ada <strong>${dataKuis.length} soal</strong>.</p>
+                        <button id="mulai-kuis" class="btn btn-primer">Mulai Kuis!</button>
+                    </div>
+                `;
+                document.getElementById('mulai-kuis').addEventListener('click', mulaiKuis);
+            }
+
+            function mulaiKuis() {
+                tampilkanSoal();
+            }
+
+            function soalSelanjutnya() {
+                soalSekarang++;
+                tampilkanSoal();
+            }
+            
+            function tampilkanSoal() {
+                if (timer) clearInterval(timer);
+                if (soalSekarang < dataKuis.length) {
+                    const soal = dataKuis[soalSekarang];
+                    let waktuSoalIni = waktuPerSoal;
+                    areaKuis.innerHTML = `
+                        <div id="timer" class="kuis-timer"></div>
+                        <div class="kuis-container">
+                            <p class="kuis-nomor-soal">Soal ${soalSekarang + 1} dari ${dataKuis.length}</p>
+                            <div class="bacaan-kuis"><h4>Kutipan Teks:</h4><p>${soal.bacaan}</p></div>
+                            <h3 class="pertanyaan-kuis">${soal.pertanyaan}</h3>
+                            <div class="pilihan-jawaban">${soal.pilihan.map(pilihan => `<button class="btn btn-pilihan">${pilihan}</button>`).join('')}</div>
+                        </div>`;
+                    const timerDisplay = document.getElementById('timer');
+                    timer = setInterval(() => {
+                        waktuSoalIni--;
+                        const menit = Math.floor(waktuSoalIni / 60);
+                        const detik = waktuSoalIni % 60;
+                        timerDisplay.textContent = `Waktu Soal Ini: ${menit}:${detik < 10 ? '0' : ''}${detik}`;
+                        if (waktuSoalIni <= 0) {
+                            clearInterval(timer);
+                            soalSelanjutnya();
+                        }
+                    }, 1000);
+                    document.querySelectorAll('.btn-pilihan').forEach(button => button.addEventListener('click', pilihJawaban));
+                } else {
+                    tampilkanHasil();
+                }
+            }
+            
+            function pilihJawaban(event) {
+                clearInterval(timer);
+                const jawabanTerpilih = event.target.textContent;
+                if (jawabanTerpilih === dataKuis[soalSekarang].jawaban) {
+                    skor++;
+                    event.target.classList.add('benar');
+                } else {
+                    event.target.classList.add('salah');
+                }
+                document.querySelectorAll('.btn-pilihan').forEach(button => button.disabled = true);
+                setTimeout(soalSelanjutnya, 1200);
+            }
+
+            // [PERUBAHAN BESAR] Fungsi untuk menampilkan hasil kuis.
+            function tampilkanHasil() {
+                clearInterval(timer);
+                areaKuis.innerHTML = `
+                    <div class="kuis-container kuis-hasil">
+                        <h2>Tantangan Selesai!</h2>
+                        <p>Semua teka-teki telah terjawab. Peti harta karun kini ada di hadapanmu. Apa yang ada di dalamnya?</p>
+                        <div id="peti-harta-karun" class="peti-harta-karun" title="Buka Peti!">📦</div>
+                        <p><strong>Klik peti untuk melihat hadiahmu!</strong></p>
+                    </div>
+                `;
+                document.getElementById('peti-harta-karun').addEventListener('click', bukaPeti, { once: true });
+            }
+
+            // [FUNGSI BARU] Fungsi untuk membuka peti harta karun
+            function bukaPeti() {
+                let pesanHasil = '';
+                let hartaSimbol = '';
+                let namaHarta = '';
+                let kelasHarta = '';
+                let nilaiAkhir = (skor / dataKuis.length) * 100;
+
+                if (nilaiAkhir >= 86) {
+                    hartaSimbol = '💎';
+                    namaHarta = 'Permata Pengetahuan';
+                    kelasHarta = 'permata';
+                    pesanHasil = "Luar biasa! Kamu adalah penjelajah sejati dengan kemampuan analisis yang tajam! Pengetahuanmu bersinar layaknya permata!";
+                } else if (nilaiAkhir >= 71) {
+                    hartaSimbol = '🥇';
+                    namaHarta = 'Emas Kebijaksanaan';
+                    kelasHarta = 'emas';
+                    pesanHasil = "Kerja bagus! Kamu telah membuktikan pemahamanmu yang mendalam dan berhak atas emas ini!";
+                } else if (nilaiAkhir >= 51) {
+                    hartaSimbol = '🥈';
+                    namaHarta = 'Perak Ketekunan';
+                    kelasHarta = 'perak';
+                    pesanHasil = "Cukup bagus! Kamu sudah sangat paham cara membandingkan informasi. Teruslah asah kemampuanmu!";
+                } else {
+                    hartaSimbol = '🥉';
+                    namaHarta = 'Perunggu Kegigihan';
+                    kelasHarta = 'perunggu';
+                    pesanHasil = "Jangan menyerah! Kamu telah berjuang hingga akhir. Ini adalah bukti kegigihanmu. Coba lagi lain kali!";
+                }
+
+                areaKuis.innerHTML = `
+                    <div class="kuis-container kuis-hasil">
+                        <h2>Harta Karun Terbuka!</h2>
+                        <div class="harta-container">
+                            <span class="harta ${kelasHarta}">${hartaSimbol}</span>
+                        </div>
+                        <h3>Kamu Mendapatkan: ${namaHarta}</h3>
+                        <p>Skor akhir kamu adalah:</p>
+                        <div class="skor-akhir">${nilaiAkhir.toFixed(0)}</div>
+                        <p><strong>${pesanHasil}</strong></p>
+                        <a href="beranda.html" class="btn btn-sekunder">Kembali ke Peta</a>
+                    </div>
+                `;
+            }
+
+            tampilkanTujuanAkhir();
+        });
+    </script>
+</body>
+</html>

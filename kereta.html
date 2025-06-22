@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permainan Kereta Observasi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS untuk gerbong agar tombol berada di tengah */
+        .wagon {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        /* CSS untuk daftar instruksi */
+        .instructions-list {
+            list-style-type: decimal;
+            margin-left: 1.5rem;
+            text-align: left;
+            margin-top: 1rem;
+        }
+        .instructions-list li {
+            margin-bottom: 0.75rem;
+        }
+        /* Override untuk tombol di navigasi */
+        header nav .btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="beranda.html" class="brand">Kembali ke Peta</a>
+            <span id="sapaan-pengguna"></span>
+        </nav>
+    </header>
+
+    <!-- Halaman Instruksi -->
+    <main id="instructions-container" class="container bg-white p-8 rounded-2xl shadow-lg text-center">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Cara Menjalankan Kereta Harta Karun</h1>
+        <p class="text-gray-600">Selamat, Masinis! Kereta ini akan membawamu menuju Harta Karun Pengetahuan. Ikuti langkah berikut untuk memulai perjalanan:</p>
+        <div class="my-6">
+            <ol class="instructions-list">
+                <li>Di bagian bawah, kamu akan melihat beberapa gerbong kereta yang acak.</li>
+                <li>Setiap gerbong berisi satu bagian dari <strong>struktur teks laporan hasil observasi</strong>, yang merupakan petunjuk penting untuk perjalananmu.</li>
+                <li>Klik tombol <strong>"Lihat Isi Gerbong"</strong> untuk membaca petunjuk di dalamnya.</li>
+                <li>Tugasmu adalah <strong>menyeret (drag)</strong> setiap gerbong dan <strong>meletakkannya (drop)</strong> di belakang lokomotif.</li>
+                <li>Susunlah gerbong-gerbong tersebut sesuai <strong>urutan struktur yang benar</strong> untuk membentuk rangkaian kereta yang siap berangkat.</li>
+                <li>Jika sudah yakin, klik tombol <strong>"Periksa Rangkaian"</strong> untuk memastikan keretamu siap menuju Harta Karun.</li>
+            </ol>
+        </div>
+        <button id="start-game-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-md transition-transform hover:scale-105">Paham, Mulai Perjalanan!</button>
+    </main>
+
+    <!-- Halaman Permainan (Awalnya tersembunyi) -->
+    <main id="game-container" class="container bg-white p-6 rounded-2xl shadow-lg" style="display: none;">
+        <div class="text-center mb-8">
+            <h1 id="game-title" class="text-3xl md:text-4xl font-bold text-gray-800"></h1>
+            <p class="text-gray-600 mt-2">Susunlah gerbong di bawah ini menjadi teks laporan hasil observasi yang runtut!</p>
+        </div>
+
+        <div class="train-container mb-8">
+            <div id="train" class="train">
+                <div class="locomotive z-10">
+                    <h3 class="font-bold text-lg">Kereta Observasi</h3>
+                    <div class="wheels"><div class="wheel"></div><div class="wheel"></div></div>
+                </div>
+                <div id="wagon-drop-zone" class="drop-zone flex-grow"></div>
+            </div>
+            <div class="track"></div>
+        </div>
+        
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold text-center mb-4 text-gray-700">Gerbong yang Tersedia</h2>
+            <div id="shuffled-wagons" class="source-zone justify-center"></div>
+        </div>
+
+        <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+            <button id="check-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-md transition-transform hover:scale-105">Periksa Jawaban</button>
+            <button id="reset-btn" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-md transition-transform hover:scale-105">Susun Ulang</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Didesain oleh Satria Ahnaf untuk Edukasi</p>
+    </footer>
+
+    <!-- Modal untuk Feedback -->
+    <div id="feedback-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 opacity-0 pointer-events-none modal z-50">
+        <div class="modal-content bg-white p-8 rounded-2xl text-center max-w-sm w-full transform scale-95">
+            <h2 id="feedback-title" class="text-3xl font-bold mb-4"></h2>
+            <p id="feedback-message" class="text-gray-600 mb-6"></p>
+            <button id="feedback-close-btn" class="bg-gray-800 text-white font-bold py-2 px-6 rounded-lg">Tutup</button>
+        </div>
+    </div>
+    
+    <!-- Modal untuk Melihat Teks -->
+    <div id="text-view-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 opacity-0 pointer-events-none modal z-50">
+        <div class="modal-content bg-white p-8 rounded-2xl max-w-2xl w-full transform scale-95">
+            <h2 id="text-view-title" class="text-2xl font-bold mb-4 text-gray-800"></h2>
+            <div id="text-view-content" class="text-gray-700 mb-6 max-h-96 overflow-y-auto pr-4 text-justify"></div>
+            <button id="text-view-close-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-8 rounded-lg">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Sapa pengguna dan cek login
+            const namaPengguna = localStorage.getItem('username');
+            const sapaanElement = document.getElementById('sapaan-pengguna');
+
+            if (!namaPengguna) {
+                window.location.href = 'index.html';
+                return;
+            }
+            sapaanElement.textContent = `Ayo! jalankan keretanya, ${namaPengguna}!`;
+
+            // --- DATA PERMAINAN ---
+            const allGameData = {
+                'suku-badui': { title: 'Mengenal Suku Badui', color: { bg: 'bg-blue-500', border: 'border-blue-700' }, data: [{ id: 'pernyataan-umum', title: 'Pernyataan Umum', content: "Orang Kanekes atau orang Baduy/Badui adalah suatu kelompok masyarakat adat sub-etnis Sunda di wilayah Kabupaten Lebak, Banten. Masyarakat Suku Badui di Banten termasuk salah satu suku yang menerapkan isolasi dari dunia luar." }, { id: 'deskripsi-bagian', title: 'Deskripsi Bagian', content: "Badui Dalam belum mengenal budaya luar dan terletak di hutan pedalaman. Karena belum mengenal kebudayaan luar, suku Badui Dalam masih memiliki budaya yang sangat asli. Mereka dikenal sangat taat mempertahankan adat istiadat dan warisan nenek moyangnya." }], correctOrder: ['pernyataan-umum', 'deskripsi-bagian'] },
+                'taman-nasional': { title: 'Taman Nasional Baluran', color: { bg: 'bg-green-500', border: 'border-green-700' }, data: [{ id: 'pernyataan-umum', title: 'Pernyataan Umum', content: "Taman Nasional Baluran merupakan perwakilan ekosistem hutan spesifik kering di Pulau Jawa. Hutan di taman ini terdiri atas tipe vegetasi savana, hutan mangrove, hutan musim, hutan pantai, hutan pegunungan bawah, hutan rawa dan hutan yang selalu hijau sepanjang tahun." }, { id: 'deskripsi-bagian', title: 'Deskripsi Bagian', content: "Tumbuhan di taman nasional ini sebanyak 444 jenis. Di antara jenis tumbuhan di sini terdapat tumbuhan asli yang khas dan menarik yaitu widoro bukol (Ziziphus rotundifolia), mimba (Azadirachta indica), dan pilang (Acacia leucophloea)." }, { id: 'deskripsi-manfaat', title: 'Deskripsi Manfaat', content: "Taman nasional memiliki beragam manfaat berupa produk jasa lingkungan, seperti udara bersih dan pemandangan alam. Kedua manfaat tersebut berada pada suatu ruang dan waktu yang sama." }], correctOrder: ['pernyataan-umum', 'deskripsi-bagian', 'deskripsi-manfaat'] },
+                'hutan-bakau': { title: 'Hutan Bakau', color: { bg: 'bg-teal-500', border: 'border-teal-700' }, data: [{ id: 'pernyataan-umum', title: 'Pernyataan Umum', content: "Indonesia menjadi negara dengan hutan bakau paling luas di dunia. Menurut data Kementerian Negara Lingkungan Hidup, luas hutan bakau Indonesia mencapai 4,3 juta ha. Hutan bakau disebut juga dengan hutan mangrove." }, { id: 'deskripsi-bagian', title: 'Deskripsi Bagian', content: "Hutan bakau terletak di wilayah pantai dan muara sungai. Tepatnya, hutan bakau terletak di garis pantai. Dengan posisi hutan bakau yang berada di garis pantai, hutan ini dipengaruhi oleh keadaan air laut." }, { id: 'deskripsi-manfaat', title: 'Deskripsi Manfaat', content: "Hutan bakau memiliki beberapa fungsi dan manfaat. Secara fisik hutan bakau dapat menahan abrasi pantai. Pada saat datang badai, hutan bakau berfungsi sebagai penahan badai dan angin yang bermuatan garam." }], correctOrder: ['pernyataan-umum', 'deskripsi-bagian', 'deskripsi-manfaat'] },
+                'museum': { title: 'Museum', color: { bg: 'bg-purple-500', border: 'border-purple-700' }, data: [{ id: 'pernyataan-umum', title: 'Pernyataan Umum', content: "Museum merupakan salah satu tempat penting dalam upaya pelestarian sejarah. Museum adalah lembaga yang berfungsi mengumpulkan, merawat, dan menyajikan serta melestarikan warisan budaya masyarakat." }, { id: 'deskripsi-bagian', title: 'Deskripsi Bagian', content: "Museum dibedakan berdasarkan koleksi dan kedudukannya. Jenis museum berdasarkan koleksi yang dimiliki dibedakan menjadi dua jenis yaitu museum umum dan museum khusus." }, { id: 'deskripsi-manfaat', title: 'Deskripsi Manfaat', content: "Fungsi museum yang utama adalah menyimpan, merawat, mengamankan, dan memanfaatkan koleksi museum berupa benda cagar budaya. Dengan demikian, museum memiliki fungsi besar yaitu sebagai tempat pelestarian." }], correctOrder: ['pernyataan-umum', 'deskripsi-bagian', 'deskripsi-manfaat'] }
+            };
+            
+            // --- VARIABEL DAN ELEMEN DOM ---
+            const gameOrder = ['suku-badui', 'taman-nasional', 'hutan-bakau', 'museum'];
+            let currentLevelIndex = 0;
+            let draggedItem = null;
+            
+            const instructionsContainer = document.getElementById('instructions-container');
+            const startGameBtn = document.getElementById('start-game-btn');
+            const gameContainer = document.getElementById('game-container');
+            
+            const gameTitleEl = document.getElementById('game-title');
+            const shuffledWagonsContainer = document.getElementById('shuffled-wagons');
+            const dropZone = document.getElementById('wagon-drop-zone');
+            const checkBtn = document.getElementById('check-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const train = document.getElementById('train');
+            const feedbackModal = document.getElementById('feedback-modal');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackMessage = document.getElementById('feedback-message');
+            const feedbackCloseBtn = document.getElementById('feedback-close-btn');
+            const textViewModal = document.getElementById('text-view-modal');
+            const textViewTitle = document.getElementById('text-view-title');
+            const textViewContent = document.getElementById('text-view-content');
+            const textViewCloseBtn = document.getElementById('text-view-close-btn');
+            
+            // --- FUNGSI-FUNGSI PERMAINAN ---
+            function initializeGame(levelIndex) {
+                const gameId = gameOrder[levelIndex];
+                const gameInfo = allGameData[gameId];
+                if (!gameInfo) return;
+
+                gameTitleEl.textContent = gameInfo.title;
+                train.classList.remove('move');
+                shuffledWagonsContainer.innerHTML = '';
+                dropZone.innerHTML = '';
+                checkBtn.disabled = false;
+
+                // [PERUBAHAN] Logika pengacakan yang lebih kuat untuk memastikan urutan selalu berbeda
+                const originalData = [...gameInfo.data];
+                let shuffledData;
+
+                // Terus mengacak hingga hasilnya tidak sama dengan urutan asli
+                // Ini sangat efektif untuk level dengan hanya 2 atau 3 gerbong
+                do {
+                    shuffledData = [...originalData].sort(() => Math.random() - 0.5);
+                } while (
+                    originalData.length > 1 && 
+                    JSON.stringify(originalData.map(item => item.id)) === JSON.stringify(shuffledData.map(item => item.id))
+                );
+
+                shuffledData.forEach(item => {
+                    const wagon = document.createElement('div');
+                    wagon.id = `wagon-${item.id}`;
+                    const colorClasses = `${gameInfo.color.bg} ${gameInfo.color.border.replace('border-', 'border-')}`;
+                    wagon.className = `wagon ${colorClasses}`;
+                    wagon.draggable = true;
+                    wagon.dataset.id = item.id;
+                    wagon.dataset.title = item.title;
+                    wagon.dataset.content = item.content.replace(/\n/g, '<br><br>');
+                    wagon.innerHTML = `
+                        <button class="view-text-btn font-semibold py-2 px-4 rounded-lg text-base">Lihat Isi Gerbong</button>
+                        <div class="wheels"><div class="wheel"></div><div class="wheel"></div></div>
+                    `;
+                    shuffledWagonsContainer.appendChild(wagon);
+                    addDragListeners(wagon);
+                });
+            }
+
+            function addDragListeners(element) {
+                element.addEventListener('dragstart', (e) => {
+                    if (e.target.tagName === 'BUTTON') { e.preventDefault(); return; }
+                    draggedItem = element;
+                    setTimeout(() => element.classList.add('dragging'), 0);
+                });
+                element.addEventListener('dragend', () => {
+                    if(draggedItem) { draggedItem.classList.remove('dragging'); }
+                    draggedItem = null;
+                });
+            }
+
+            function checkAnswer() {
+                const gameId = gameOrder[currentLevelIndex];
+                const correctOrder = allGameData[gameId].correctOrder;
+                const wagonsInDropZone = dropZone.querySelectorAll('.wagon');
+                if (wagonsInDropZone.length !== correctOrder.length) {
+                    showFeedbackModal('Belum Selesai!', 'Pastikan semua gerbong sudah diletakkan di jalur kereta.');
+                    return;
+                }
+                const currentOrder = Array.from(wagonsInDropZone).map(wagon => wagon.dataset.id);
+                const isCorrect = JSON.stringify(currentOrder) === JSON.stringify(correctOrder);
+
+                if (isCorrect) {
+                    checkBtn.disabled = true;
+                    train.classList.add('move');
+
+                    setTimeout(() => {
+                        currentLevelIndex++;
+                        if (currentLevelIndex < gameOrder.length) {
+                            showFeedbackModal('Hebat!', 'Rangkaian benar! Kereta siap untuk melanjutkan perjalanan...');
+                            setTimeout(() => {
+                                hideFeedbackModal();
+                                initializeGame(currentLevelIndex);
+                            }, 2500);
+                        } else {
+                            showFeedbackModal('Selamat!', 'Kamu telah menyelesaikan semua rute perjalanan! Kamu akan dikembalikan ke Peta Penjelajah.');
+                            localStorage.setItem('permainanKeretaSelesai', 'true');
+                            setTimeout(() => {
+                                window.location.href = 'beranda.html';
+                            }, 3000);
+                        }
+                    }, 4000);
+                } else {
+                    showFeedbackModal('Coba Lagi!', 'Urutan gerbong masih belum tepat. Perhatikan kembali struktur teks observasi.');
+                }
+            }
+            
+            function showFeedbackModal(title, message) {
+                feedbackTitle.textContent = title;
+                feedbackMessage.textContent = message;
+                feedbackCloseBtn.textContent = 'Tutup';
+                feedbackCloseBtn.onclick = hideFeedbackModal;
+                
+                feedbackModal.classList.remove('opacity-0', 'pointer-events-none');
+                feedbackModal.querySelector('.modal-content').classList.remove('scale-95');
+            }
+
+            function hideFeedbackModal() {
+                feedbackModal.classList.add('opacity-0', 'pointer-events-none');
+                feedbackModal.querySelector('.modal-content').classList.add('scale-95');
+            }
+            
+            function showTextViewModal(title, content) {
+                textViewTitle.textContent = title;
+                textViewContent.innerHTML = content;
+                textViewModal.classList.remove('opacity-0', 'pointer-events-none');
+                textViewModal.querySelector('.modal-content').classList.remove('scale-95');
+            }
+
+            function hideTextViewModal() {
+                textViewModal.classList.add('opacity-0', 'pointer-events-none');
+                textViewModal.querySelector('.modal-content').classList.add('scale-95');
+            }
+
+            // --- EVENT LISTENERS ---
+            startGameBtn.addEventListener('click', () => {
+                instructionsContainer.style.display = 'none';
+                gameContainer.style.display = 'block';
+                initializeGame(currentLevelIndex);
+                
+                // Mengembalikan teks ke tema kereta
+                document.querySelector('#game-container .text-gray-600').textContent = 'Susunlah gerbong di bawah ini menjadi teks laporan hasil observasi yang runtut!';
+                document.querySelector('#game-container h2').textContent = 'Gerbong yang Tersedia';
+                document.querySelector('#check-btn').textContent = 'Periksa Rangkaian';
+                document.querySelector('#reset-btn').textContent = 'Susun Ulang';
+                document.querySelector('.locomotive h3').textContent = 'Kereta Harta Karun';
+
+
+            });
+            
+            gameContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('view-text-btn')) {
+                    const wagon = e.target.closest('.wagon');
+                    if (wagon) {
+                        showTextViewModal(wagon.dataset.title, wagon.dataset.content);
+                    }
+                }
+            });
+            
+            [dropZone, shuffledWagonsContainer].forEach(zone => {
+                zone.addEventListener('dragover', e => e.preventDefault());
+                zone.addEventListener('drop', e => {
+                    e.preventDefault();
+                    if (draggedItem) zone.appendChild(draggedItem);
+                });
+            });
+
+            checkBtn.addEventListener('click', checkAnswer);
+            resetBtn.addEventListener('click', () => initializeGame(currentLevelIndex));
+            feedbackCloseBtn.addEventListener('click', hideFeedbackModal);
+            textViewCloseBtn.addEventListener('click', hideTextViewModal);
+        });
+    </script>
+</body>
+</html>

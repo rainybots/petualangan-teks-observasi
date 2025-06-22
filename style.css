@@ -1,0 +1,499 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Lato:wght@400;700&display=swap');
+
+/* Variabel CSS untuk Tema Hutan Tropis */
+:root {
+    --warna-primer: #2A9D8F; /* Hijau Toska Tua */
+    --warna-sekunder: #E9C46A; /* Kuning Jagung */
+    --warna-aksen: #F4A261; /* Oranye Pasir */
+    --warna-latar: #F8F9FA; /* Putih Gading */
+    --warna-teks: #264653; /* Biru Laut Dalam */
+    --warna-putih: #FFFFFF;
+    --warna-error: #E76F51;
+    --bayangan-halus: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --radius-sudut: 12px;
+}
+
+/* Reset dan Gaya Dasar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+    background-color: var(--warna-latar);
+    color: var(--warna-teks);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Poppins', sans-serif;
+    color: var(--warna-teks);
+    margin-bottom: 0.5rem;
+}
+
+h1 { font-size: 2.5rem; line-height: 1.2; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+
+p {
+    margin-bottom: 1rem;
+}
+
+a {
+    text-decoration: none;
+    color: var(--warna-primer);
+    cursor: pointer;
+}
+
+/* Header dan Navigasi */
+header {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.brand {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+#sapaan-pengguna {
+    font-weight: 700;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 2rem;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* Halaman Login */
+.background-blur {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
+    filter: blur(5px) brightness(0.8);
+    z-index: -1;
+}
+
+.login-container {
+    background: var(--warna-latar);
+    padding: 2.5rem;
+    border-radius: var(--radius-sudut);
+    box-shadow: var(--bayangan-halus);
+    max-width: 450px;
+    margin: 5vh auto;
+    text-align: center;
+}
+
+.login-header .login-icon {
+    border-radius: 50%;
+    margin-bottom: 1rem;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Lato', sans-serif;
+    font-size: 1rem;
+}
+
+/* Tombol (Button) */
+.btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.btn-primer {
+    background-color: var(--warna-primer);
+    color: var(--warna-putih);
+}
+
+.btn-primer:hover {
+    background-color: #248a7e;
+    transform: translateY(-3px);
+}
+
+.btn-sekunder {
+    background-color: var(--warna-sekunder);
+    color: var(--warna-teks);
+}
+
+/* Halaman Beranda: Judul */
+.page-title {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* Peta Interaktif */
+.map-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px; /* Lebar maksimal peta */
+    margin: 2rem auto;
+    border-radius: var(--radius-sudut);
+    overflow: hidden;
+    box-shadow: var(--bayangan-halus);
+    background-color: #f0ead6;
+    border: 8px solid #d4c3a2;
+}
+
+.map-background {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Gaya untuk elemen SVG */
+.map-scenery, .map-label, .compass-rose {
+    pointer-events: none;
+    user-select: none;
+}
+
+.map-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    fill: #7d6a4a;
+    font-weight: 600;
+}
+
+.compass-rose line, .compass-rose polygon {
+    stroke: #7d6a4a;
+    stroke-width: 2px;
+    fill: #7d6a4a;
+}
+.compass-rose circle {
+    stroke: #a08c6e;
+    stroke-width: 2px;
+}
+.compass-rose text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    fill: #5c4d32;
+    text-anchor: middle;
+    font-weight: 700;
+}
+
+.map-point {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: var(--warna-aksen);
+    color: var(--warna-putih);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    border: 3px solid var(--warna-putih);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    animation: pulse 2s infinite;
+    transform: translate(-50%, -50%);
+}
+
+.map-point:hover {
+    transform: translate(-50%, -50%) scale(1.15);
+    animation-play-state: paused;
+}
+
+#point-materi { top: 33%; left: 28%; }
+#point-permainan { top: 55%; left: 53%; }
+#point-kuis { top: 29%; left: 72%; }
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(244, 162, 97, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(244, 162, 97, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(244, 162, 97, 0); }
+}
+
+.map-point.terkunci {
+    background-color: #888;
+    color: #ccc;
+    cursor: not-allowed;
+    animation: none;
+    filter: grayscale(1);
+    pointer-events: none;
+}
+
+.map-point.terkunci::before {
+    content: '🔒';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #333;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(38, 70, 83, 0.6);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    padding: 1rem;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-box {
+    position: relative;
+    background: var(--warna-putih);
+    padding: 2.5rem;
+    border-radius: var(--radius-sudut);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.show .modal-box {
+    transform: scale(1);
+}
+
+.modal-box::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 20px;
+    height: 20px;
+    background-color: var(--warna-putih);
+    z-index: -1;
+}
+
+.modal-box h3 {
+    margin-top: 0;
+    color: var(--warna-teks);
+}
+
+.modal-text-content {
+    margin-bottom: 1.5rem;
+}
+
+.modal-text-content p {
+    margin-bottom: 0;
+}
+
+/* --- [DIKEMBALIKAN] Gaya yang Dipertahankan --- */
+
+/* Halaman Materi */
+.materi-section {
+    background: var(--warna-putih);
+    padding: 2rem;
+    border-radius: var(--radius-sudut);
+    margin-bottom: 2rem;
+    box-shadow: var(--bayangan-halus);
+}
+
+/* CSS Khusus untuk Pohon Interaktif */
+.pohon-interaktif-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.pohon-diagram-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+.pohon-node {
+    width: 80%;
+    padding: 1rem;
+    border: 3px solid var(--warna-teks);
+    border-radius: var(--radius-sudut);
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pohon-node:hover, .pohon-node.aktif {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: var(--bayangan-halus);
+}
+
+.pohon-line {
+    width: 4px;
+    height: 30px;
+    background-color: var(--warna-teks);
+}
+
+.node-buah { background-color: #E76F51; color: var(--warna-putih); border-color: #E76F51;}
+.node-dahan { background-color: #2A9D8F; color: var(--warna-putih); border-color: #2A9D8F;}
+.node-batang { background-color: #A0522D; color: var(--warna-putih); border-color: #A0522D;}
+.node-akar { background-color: #E9C46A; color: var(--warna-teks); border-color: #E9C46A;}
+
+#panel-penjelasan-pohon {
+    background-color: var(--warna-putih);
+    border-left: 5px solid var(--warna-primer);
+    padding: 1.5rem;
+    border-radius: var(--radius-sudut);
+    box-shadow: var(--bayangan-halus);
+    width: 100%;
+    margin-top: 1.5rem;
+    display: none;
+    animation: fadeInPage 0.5s;
+}
+
+/* Gaya untuk Permainan Kereta */
+.train-container { position: relative; width: 100%; overflow-x: hidden; padding-bottom: 30px; }
+.train { display: flex; align-items: flex-end; position: relative; left: 0; transition: left 4s cubic-bezier(0.4, 0, 0.6, 1); }
+.train.move { left: 120%; }
+.locomotive, .wagon { position: relative; border: 3px solid; border-radius: 8px; color: white; padding: 1rem; min-height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.locomotive { background-color: #ef4444; border-color: #b91c1c; min-width: 160px; z-index: 10; border-top-right-radius: 20px; }
+.wagon { min-width: 220px; margin-left: 20px; cursor: grab; transition: all 0.2s ease; }
+.wagon:active { cursor: grabbing; transform: scale(1.05); box-shadow: 0 8px 12px rgba(0,0,0,0.2); }
+.wagon.dragging { opacity: 0.5; }
+.wagon::before, .locomotive::before { content: ''; position: absolute; right: -23px; top: 50%; transform: translateY(-50%); width: 20px; height: 10px; background-color: #4b5563; border: 2px solid #1f2937; border-radius: 2px; z-index: 5; }
+.wagon:last-child::before { display: none; }
+.locomotive + .drop-zone .wagon:first-child::before { display: block; }
+.wheels { position: absolute; bottom: -20px; left: 15%; width: 70%; display: flex; justify-content: space-around; }
+.wheel { width: 25px; height: 25px; background-color: #1f2937; border-radius: 50%; border: 3px solid #4b5563; }
+.drop-zone { min-height: 150px; display: flex; align-items: flex-end; padding: 1rem; background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%239CA3AF' stroke-width='4' stroke-dasharray='6%2c 14' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e"); border-radius: 1rem; padding-bottom: 30px; }
+.source-zone { display: flex; flex-wrap: wrap; gap: 1.5rem; padding: 1rem; background-color: #e0e7ff; border-radius: 1rem; min-height: 150px; }
+.track { height: 8px; background: linear-gradient(90deg, #6b7280 0%, #6b7280 70%, transparent 70%), linear-gradient(90deg, #6b7280 0%, #6b7280 70%, transparent 70%); background-size: 20px 2px, 20px 2px; background-repeat: repeat-x, repeat-x; background-position: 0 0, 0 100%; width: 110%; position: relative; left: -5%; margin-top: 15px; }
+.modal-content { box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+.view-text-btn { background-color: rgba(255, 255, 255, 0.2); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.5); transition: background-color 0.2s; }
+.view-text-btn:hover { background-color: rgba(255, 255, 255, 0.3); }
+
+/* Halaman Kuis */
+.kuis-container { background: var(--warna-putih); padding: 2rem; border-radius: var(--radius-sudut); box-shadow: var(--bayangan-halus); text-align: center; margin-top: 1rem; }
+.kuis-timer { font-family: 'Poppins', sans-serif; font-size: 1.2rem; background-color: var(--warna-teks); color: var(--warna-putih); padding: 0.5rem 1rem; border-radius: 8px; display: inline-block; margin-bottom: 1.5rem; }
+.bacaan-kuis { background-color: var(--warna-latar); border-left: 5px solid var(--warna-sekunder); padding: 1rem; margin-bottom: 1.5rem; text-align: left; font-style: italic; }
+.pertanyaan-kuis { margin-bottom: 2rem; }
+.pilihan-jawaban { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+@media (min-width: 640px) { .pilihan-jawaban { grid-template-columns: 1fr 1fr; } }
+.btn-pilihan { background-color: var(--warna-latar); border: 2px solid var(--warna-primer); color: var(--warna-primer); }
+.btn-pilihan:hover:not(:disabled) { background-color: var(--warna-primer); color: var(--warna-putih); }
+.btn-pilihan.benar { background-color: #28a745 !important; color: white !important; border-color: #28a745 !important; }
+.btn-pilihan.salah { background-color: #dc3545 !important; color: white !important; border-color: #dc3545 !important; }
+.kuis-hasil .skor-akhir { font-size: 4rem; font-weight: 700; color: var(--warna-primer); margin: 1rem 0; }
+@keyframes fadeInPage { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* [BARU] Gaya untuk Harta Karun */
+.peti-harta-karun {
+    font-size: 8rem;
+    cursor: pointer;
+    margin: 1rem 0;
+    transition: transform 0.2s ease-in-out;
+    animation: wiggle 2.5s infinite;
+}
+.peti-harta-karun:hover {
+    transform: scale(1.1);
+    animation-play-state: paused;
+}
+@keyframes wiggle {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+    75% { transform: rotate(-3deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.harta-container {
+    animation: pop-in 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.harta {
+    font-size: 6rem;
+    display: block;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.harta.permata { animation: sparkle 1.5s infinite; }
+.harta.emas { animation: glow-gold 2s infinite; }
+
+@keyframes pop-in {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+}
+@keyframes sparkle {
+    0%, 100% { text-shadow: 0 0 10px #fff, 0 0 20px #00f, 0 0 30px #00f; }
+    50% { text-shadow: 0 0 20px #fff, 0 0 30px #00f, 0 0 40px #00f; }
+}
+@keyframes glow-gold {
+    0%, 100% { text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700; }
+    50% { text-shadow: 0 0 20px #ffd700, 0 0 30px #fff; }
+}
